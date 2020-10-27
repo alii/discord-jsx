@@ -1,6 +1,6 @@
 {
   "name": "discord-jsx",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Alistair Smith",
@@ -27,5 +27,9 @@
     "react": "^17.0.1",
     "react-nil": "^0.0.3",
     "scheduler": "^0.20.1"
+  },
+  "repository": {
+    "url": "https://github.com/alii/discord-jsx",
+    "type": "git"
   }
 }
