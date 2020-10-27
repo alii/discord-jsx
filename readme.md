@@ -9,28 +9,34 @@ yarn add discord-jsx
 ### Usage
 
 ```tsx
-import { Client, Command, Event, Token, start } from "discord-jsx";
-
-const token = process.env.DISCORD_TOKEN;
+import { Client, Command, Token, start, CommonInhibitors } from "discord-jsx";
 
 function App() {
   return (
-    <Client prefix={"!"}>
+    <Client prefix={"--"}>
+      <Command
+        name={"ping"}
+        description={"Ping pong command"}
+        inhibitors={[CommonInhibitors.guildsOnly]}
+      >
+        hello {(msg) => msg.author.tag}
+      </Command>
       <Command
         name={"say"}
-        description={"Basic command that repeats your arguments"}
-        handler={(message, ...args) => message.reply(args.join(" "))}
-      />
-      <Event
-        event={"message"}
-        handler={(message) => {
-          console.log(`[${message.author.tag}]: ${message.content}`);
-        }}
+        description={"Repeats the message you say"}
+        inhibitors={[CommonInhibitors.noBots, CommonInhibitors.guildsOnly]}
+      >
+        {(_msg, ...args) => args.join(" ")}
+      </Command>
+      <Command
+        name={"demo"}
+        description={"Demos inline commands"}
+        handler={(msg) => msg.reply("Hello world")}
       />
       <Token
-        onReady={() => console.log("Ready")}
-        onLogin={() => console.log("Logging in")}
-        token={token}
+        token={process.env.DISCORD_TOKEN!}
+        onLogin={(client) => console.log(`Logging in as ${client.user.tag}`)}
+        onReady={(client) => console.log(`Ready as ${client.user.tag}`)}
       />
     </Client>
   );
