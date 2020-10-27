@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "prepublish": "yarn build"
+    "prepare": "yarn build"
   },
   "files": [
     "dist",
