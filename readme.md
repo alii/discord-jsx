@@ -17,9 +17,9 @@ function App() {
   return (
     <Client prefix={"!"}>
       <Command
-        name={"ping"}
-        description={"Basic ping-pong command"}
-        handler={(message) => message.reply("Pong")}
+        name={"say"}
+        description={"Basic command that repeats your arguments"}
+        handler={(message, ...args) => message.reply(args.join(" "))}
       />
       <Event
         event={"message"}
