@@ -1,18 +1,17 @@
 {
   "name": "discord-jsx",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Alistair Smith",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist&&tsc",
     "prepare": "yarn build"
   },
   "files": [
     "dist",
     "package.json",
-    "tsconfig.json",
     "readme.md"
   ],
   "devDependencies": {
@@ -20,6 +19,7 @@
     "@types/react": "^16.9.53",
     "eslint": "^7.12.0",
     "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
     "typescript": "^4.0.5"
   },
   "dependencies": {
