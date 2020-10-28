@@ -6,7 +6,9 @@ type EventProps<Key extends keyof ClientEvents> = {
   handler(...args: ClientEvents[Key]): void;
 };
 
-export function Event<Key extends keyof ClientEvents>(props: EventProps<Key>) {
+export function Event<Key extends keyof ClientEvents>(
+  props: EventProps<Key>
+): JSX.Element {
   const context = useClientContext();
   context.client.on(props.event, (...args) => props.handler(...args));
   return null;

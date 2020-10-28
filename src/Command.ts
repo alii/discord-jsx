@@ -1,12 +1,14 @@
 import { useClientContext } from "./context";
-import { APIMessageContentResolvable, Message } from "discord.js";
-import { useArguments } from "./util";
+import { Message } from "discord.js";
+import { useArguments, useCommand } from "./util";
 import { Inhibitor } from "./CommonInhibitors";
+import { Shortcut } from "./Shortcuts";
 
 type Child =
   | string
   | number
-  | ((message: Message, ...args: string[]) => string);
+  | ((message: Message, ...args: string[]) => string | Promise<string>)
+  | Record<string, Shortcut>;
 
 type CommandProps = {
   name: string;
@@ -17,18 +19,18 @@ type CommandProps = {
   | { handler(message: Message, ...args: string[]): unknown }
 );
 
-export function Command(props: CommandProps) {
-  const context = useClientContext();
+export function Command(props: CommandProps): JSX.Element {
   const parseArguments = useArguments();
+  const context = useClientContext();
 
-  context.client.on("message", async (message) => {
+  useCommand(async (message) => {
     const { command: commandName, args } = parseArguments(message);
 
     if (commandName !== props.name) {
       return;
     }
 
-    if (message.author.id === context.client.user.id) return;
+    if (message.author.id === context.client.user?.id) return;
 
     if (props.inhibitors) {
       for (const inhibitor of props.inhibitors) {
@@ -47,15 +49,29 @@ export function Command(props: CommandProps) {
         ? props.children
         : [props.children];
 
-      const returnMessage: APIMessageContentResolvable = children
-        .reduce((msg, child) => {
-          if (typeof child === "function") {
-            return msg + child(message, ...args);
+      const returnMessage = await children.reduce(async (_msg, child) => {
+        const msg = await _msg;
+
+        if (typeof child === "function") {
+          return msg + (await child(message, ...args));
+        }
+
+        if (typeof child === "object") {
+          const values = Object.values(child);
+
+          if (values.length !== 1) {
+            throw new Error(
+              `Shortcut objects must only have one property. Found ${values.length} on ${child}`
+            );
           }
 
-          return msg + child.toString();
-        }, "")
-        .toString();
+          const [shortcut] = values;
+
+          return msg + shortcut(message);
+        }
+
+        return msg + child.toString();
+      }, Promise.resolve(""));
 
       await message.channel.send(returnMessage);
     } else {

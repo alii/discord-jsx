@@ -8,7 +8,7 @@ type ClientProps = {
   constructorOptions?: ClientOptions;
 };
 
-export function Client(props: ClientProps) {
+export function Client(props: ClientProps): JSX.Element {
   return (
     <Provider
       value={{

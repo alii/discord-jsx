@@ -8,7 +8,7 @@ type TokenProps = {
   onLogin?(client: Client): void;
 };
 
-export function Token(props: TokenProps) {
+export function Token(props: TokenProps): JSX.Element {
   const context = useClientContext();
 
   useEffect(() => {

@@ -1,5 +1,7 @@
 import * as React from "react";
 import { Client, Command, Token, start, CommonInhibitors } from "../src";
+import { TextChannel } from "discord.js";
+import { author, channelName } from "../src/Shortcuts";
 
 function App() {
   return (
@@ -17,16 +19,20 @@ function App() {
         inhibitors={[CommonInhibitors.noBots, CommonInhibitors.guildsOnly]}
       >
         {(_msg, ...args) => args.join(" ")}
+        {(message) => (message.channel as TextChannel).name}
       </Command>
       <Command
         name={"demo"}
         description={"Demos inline commands"}
         handler={(msg) => msg.reply("Hello world")}
       />
+      <Command name={"shortcuts"} description={"Demos using shortcuts"}>
+        Hello {{ author }}, I hope you like this {{ channelName }}
+      </Command>
       <Token
         token={process.env.DISCORD_TOKEN!}
-        onLogin={(client) => console.log(`Logging in as ${client.user.tag}`)}
-        onReady={(client) => console.log(`Ready as ${client.user.tag}`)}
+        onLogin={(client) => console.log(`Logging in as ${client.user?.tag}`)}
+        onReady={(client) => console.log(`Ready as ${client.user?.tag}`)}
       />
     </Client>
   );
