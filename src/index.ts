@@ -5,4 +5,5 @@ export * from "./start";
 export * from "./Token";
 export * from "./util";
 export * from "./CommonInhibitors";
+export * from "./Shortcuts";
 export { useClientContext } from "./context";
