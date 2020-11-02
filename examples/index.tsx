@@ -1,11 +1,27 @@
 import * as React from "react";
-import { Client, Command, Token, start, CommonInhibitors } from "../src";
+
+import {
+  Client,
+  Command,
+  Token,
+  start,
+  CommonInhibitors,
+  author,
+  channelName,
+} from "../src";
+
 import { TextChannel } from "discord.js";
-import { author, channelName } from "../src/Shortcuts";
 
 function App() {
   return (
-    <Client prefix={"--"}>
+    <Client
+      prefix={"--"}
+      onError={(message, error) => {
+        console.log(
+          `[ERROR][c:${message.channel.id}, m:${message.id}]: ${error.message}`
+        );
+      }}
+    >
       <Command
         name={"ping"}
         description={"Ping pong command"}

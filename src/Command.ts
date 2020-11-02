@@ -45,35 +45,44 @@ export function Command(props: CommandProps): JSX.Element {
     }
 
     if ("children" in props) {
-      const children: Child[] = Array.isArray(props.children)
-        ? props.children
-        : [props.children];
+      try {
+        const children: Child[] = Array.isArray(props.children)
+          ? props.children
+          : [props.children];
 
-      const returnMessage = await children.reduce(async (_msg, child) => {
-        const msg = await _msg;
+        const returnMessage = await children.reduce(async (_msg, child) => {
+          const msg = await _msg;
 
-        if (typeof child === "function") {
-          return msg + (await child(message, ...args));
-        }
-
-        if (typeof child === "object") {
-          const values = Object.values(child);
-
-          if (values.length !== 1) {
-            throw new Error(
-              `Shortcut objects must only have one property. Found ${values.length} on ${child}`
-            );
+          if (typeof child === "function") {
+            return msg + (await child(message, ...args));
           }
 
-          const [shortcut] = values;
+          if (typeof child === "object") {
+            const values = Object.values(child);
 
-          return msg + shortcut(message);
+            if (values.length !== 1) {
+              throw new Error(
+                `Shortcut objects must only have one property. Found ${values.length} on ${child}`
+              );
+            }
+
+            const [shortcut] = values;
+
+            return msg + shortcut(message);
+          }
+
+          return msg + child.toString();
+        }, Promise.resolve(""));
+
+        await message.channel.send(returnMessage);
+      } catch (e) {
+        if ("onError" in context) {
+          return context.onError(message, e);
+        } else {
+          message.channel.send(`⚠ **An error occurred:** ${e.message}`);
+          context.allowLogging && console.error(e);
         }
-
-        return msg + child.toString();
-      }, Promise.resolve(""));
-
-      await message.channel.send(returnMessage);
+      }
     } else {
       await props.handler(message, ...args);
     }

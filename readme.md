@@ -16,21 +16,28 @@ yarn add discord-jsx
 
 ### `<Client />`
 
+| _prop_      | prefix                | onError?                    |
+| ----------- | --------------------- | --------------------------- |
+| _type_      | string                | `(error: Error) => unknown` |
+| Description | The prefix of the bot | An error handler            |
+
 This is the most fundamental part of any `discord-jsx` application. It is the internal `Provider` for the discord.js `Client` under the hood, as well as prefix among other things.
 
 ### `<Token token={string} />`
 
-| _prop_ | token  | onReady                       | onLogin?                      |
-| ------ | ------ | ----------------------------- | ----------------------------- |
-| _type_ | string | `(client: Client) => unknown` | `(client: Client) => unknown` |
+| _prop_      | token         | onReady                       | onLogin?                      |
+| ----------- | ------------- | ----------------------------- | ----------------------------- |
+| _type_      | string        | `(client: Client) => unknown` | `(client: Client) => unknown` |
+| Description | The bot token | Ready event shorthand         | Login event shorthand         |
 
 This component will run `client.login()` under the hood, and is the starting point for any `discord-jsx` client.
 
 ### `<Command />`
 
-| _prop_ | name   | description | inhibitors?   | handler?                                           | children?  |
-| ------ | ------ | ----------- | ------------- | -------------------------------------------------- | ---------- |
-| _type_ | string | string      | `Inhibitor[]` | `(message: Message, ...args: string[]) => unknown` | Read below |
+| _prop_      | name                    | description                               | inhibitors?                      | handler?                                           | children?                      |
+| ----------- | ----------------------- | ----------------------------------------- | -------------------------------- | -------------------------------------------------- | ------------------------------ |
+| _type_      | string                  | string                                    | `Inhibitor[]`                    | `(message: Message, ...args: string[]) => unknown` | Read below                     |
+| Description | The name of the command | The description of what this command does | Optional inhibitors (Read below) | Optional handler function (Read below)             | Optional children (Read below) |
 
 The `Command` component is very versatile when not using a `handler` function prop. It supports three main types of children. Text (string or number), a Shortcut (we'll come on to that later), or a custom function that takes 0-2 arguments.
 
@@ -83,9 +90,10 @@ And an example using the second argument (message args)
 
 ### `<Event />`
 
-| _prop_ | event                                                                          | handler                                                                  |
-| ------ | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| _type_ | [`keyof ClientEvents`](https://discord.js.org/#/docs/main/stable/class/Client) | Function that accepts the params referenced in the list of client events |
+| _prop_      | event                                                                          | handler                                                                  |
+| ----------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| _type_      | [`keyof ClientEvents`](https://discord.js.org/#/docs/main/stable/class/Client) | Function that accepts the params referenced in the list of client events |
+| Description | The event name                                                                 | The handler for this event                                               |
 
 This is a component for listening to custom Discord.js Client events. It's fairly self-explanatory. Here's a couple examples:
 

@@ -1,9 +1,11 @@
-import { Client } from "discord.js";
+import { Client, Message } from "discord.js";
 import { createContext, useContext } from "react";
 
-type ClientContext = {
+export type ClientContext = {
   client: Client;
   prefix: string;
+  onError?: (message: Message, error: Error) => unknown;
+  allowLogging: boolean;
 };
 
 export const context = createContext<ClientContext | null>(null);
