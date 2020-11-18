@@ -79,12 +79,21 @@ export function Command(props: CommandProps): JSX.Element {
         if ("onError" in context) {
           return context.onError(message, e);
         } else {
-          message.channel.send(`⚠ **An error occurred:** ${e.message}`);
+          await message.channel.send(`⚠ **An error occurred:** ${e.message}`);
           context.allowLogging && console.error(e);
         }
       }
     } else {
-      await props.handler(message, ...args);
+      try {
+        await props.handler(message, ...args);
+      } catch (e) {
+        if ("onError" in context) {
+          return context.onError(message, e);
+        } else {
+          await message.channel.send(`⚠ **An error occurred:** ${e.message}`);
+          context.allowLogging && console.error(e);
+        }
+      }
     }
   });
 

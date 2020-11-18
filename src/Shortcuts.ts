@@ -3,7 +3,7 @@ import { Message, TextChannel } from "discord.js";
 /**
  * A shortcut is a function that returns a specific bit of data from a message
  */
-export type Shortcut = (message: Message) => string;
+export type Shortcut = (message: Message) => string | Promise<string>;
 
 /**
  * Shortcut that returns the username#discriminator of the author of the message
