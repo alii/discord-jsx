@@ -82,7 +82,7 @@ export function Command(props: CommandProps): JSX.Element {
           await message.channel.send(`⚠ **An error occurred:** ${e.message}`);
           context.allowLogging && console.error(e);
         }
-      }
+      } // uwu
     } else {
       try {
         await props.handler(message, ...args);
